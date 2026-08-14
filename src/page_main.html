@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Проект</title>
+  <link href="/Django/bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <style>
+    body {
+      background: #f8f9fa;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 280px;
+      height: 100vh;
+      background: #212529;
+      border-right: 1px solid #343a40;
+      padding: 1.75rem 1.25rem 1.5rem;
+      overflow-y: auto;
+      z-index: 1030;
+      box-shadow: 2px 0 12px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+    }
+    .menu-top {
+      flex: 1;
+    }
+    .menu-header {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid #495057;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .menu-header i,
+    .menu-header svg {
+      color: #ffffff;
+      fill: #ffffff;
+    }
+    .menu-header svg {
+      filter: brightness(0) invert(1);
+    }
+    .nav-item-custom {
+      display: flex;
+      align-items: center;
+      padding: 0.6rem 0.75rem;
+      border-radius: 0.75rem;
+      color: #f8f9fa;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background 0.15s ease, color 0.15s ease;
+      margin-bottom: 0.15rem;
+    }
+    .nav-item-custom i {
+      font-size: 1.3rem;
+      width: 2rem;
+      text-align: center;
+      color: #adb5bd;
+      transition: color 0.15s;
+    }
+    .nav-item-custom:hover {
+      background: #343a40;
+      color: #ffffff;
+    }
+    .nav-item-custom:hover i {
+      color: #ffffff;
+    }
+    .nav-item-custom.active {
+      background: #0d6efd;
+      color: #ffffff;
+      font-weight: 600;
+    }
+    .nav-item-custom.active i {
+      color: #ffffff;
+    }
+
+    .menu-divider {
+      margin: 0.75rem 0 0.5rem 0;
+      border-top: 1px solid #495057;
+    }
+    .user-bottom {
+      margin-top: auto;
+      padding-top: 0.75rem;
+      border-top: 1px solid #495057;
+    }
+    .user-dropdown-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.6rem 0.75rem;
+      background: #343a40;
+      border-radius: 2rem;
+      width: 100%;
+      border: none;
+      color: #f8f9fa;
+      cursor: pointer;
+      transition: background 0.15s;
+      text-align: left;
+    }
+    .user-dropdown-toggle:hover {
+      background: #495057;
+    }
+    .user-dropdown-toggle::after {
+      margin-left: auto;
+      content: "▾";
+      font-size: 0.8rem;
+      color: #adb5bd;
+    }
+    .user-dropdown-toggle[aria-expanded="true"]::after {
+      content: "▴";
+    }
+    .user-avatar {
+      width: 2.5rem;
+      height: 2.5rem;
+      background: #0d6efd;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 600;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .user-avatar i {
+      color: #ffffff;
+    }
+    .user-name {
+      font-weight: 500;
+      color: #f8f9fa;
+      flex-grow: 1;
+      font-size: 0.95rem;
+    }
+    .user-name small {
+      display: block;
+      font-weight: 400;
+      font-size: 0.7rem;
+      color: #adb5bd;
+    }
+    .dropdown-menu-custom {
+      background: #343a40;
+      border: 1px solid #495057;
+      border-radius: 0.75rem;
+      padding: 0.3rem 0;
+      min-width: 160px;
+      margin-top: 0.25rem;
+      box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.4);
+    }
+    .dropdown-menu-custom .dropdown-item {
+      color: #f8f9fa;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background 0.15s;
+    }
+    .dropdown-menu-custom .dropdown-item:hover {
+      background: #495057;
+      color: #ffffff;
+    }
+    .dropdown-menu-custom .dropdown-item i {
+      color: #adb5bd;
+      font-size: 1.1rem;
+    }
+    .dropdown-menu-custom .dropdown-item:hover i {
+      color: #ffffff;
+    }
+    .dropdown-menu-custom .dropdown-item.text-danger {
+      color: #f8d7da;
+    }
+    .dropdown-menu-custom .dropdown-item.text-danger:hover {
+      background: #6c2a2a;
+      color: #ffffff;
+    }
+    .dropdown-menu-custom .dropdown-divider {
+      border-top: 1px solid #495057;
+      margin: 0.2rem 0;
+    }
+    .main-content {
+      margin-left: 280px;
+      padding: 2rem 1.5rem;
+      min-height: 100vh;
+    }
+    .card-pricing {
+      transition: box-shadow 0.2s ease;
+      border: 1px solid #dee2e6;
+    }
+    .card-pricing:hover {
+      box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.08);
+    }
+    .price {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #0d6efd;
+    }
+    .price small {
+      font-size: 1rem;
+      font-weight: 400;
+      color: #6c757d;
+    }
+    .feature-list {
+      list-style: none;
+      padding-left: 0;
+    }
+    .feature-list li {
+      padding: 0.25rem 0;
+      border-bottom: 1px dashed #e9ecef;
+    }
+    .feature-list li:last-child {
+      border-bottom: none;
+    }
+    .feature-list li::before {
+      content: "✓";
+      color: #0d6efd;
+      font-weight: 700;
+      margin-right: 0.5rem;
+    }
+    .header-line {
+      border-bottom: 2px;
+      width: 60px;
+      margin: 0 auto 0.5rem auto;
+    }
+  </style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="menu-top">
+    <div class="menu-header">
+      <i class="bi bi-bootstrap" style="font-size: 2rem;"></i> Меню
+    </div>
+    <nav class="nav flex-column">
+      <a href="#" class="nav-item-custom active">
+        <i class="bi bi-house-door"></i> Главная
+      </a>
+      <a href="#" class="nav-item-custom">
+        <i class="bi bi-grid"></i> Категории
+      </a>
+      <a href="#" class="nav-item-custom">
+        <i class="bi bi-cart"></i> Заказы
+      </a>
+      <a href="#" class="nav-item-custom">
+        <i class="bi bi-person-circle"></i> Контакты
+      </a>
+    </nav>
+  </div>
+  <div class="user-bottom">
+    <div class="dropdown">
+      <button class="user-dropdown-toggle d-flex align-items-center" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+      <i class="bi bi-person me-2" style="font-size: 1.5rem;"></i>
+      Пользователь
+    </button>
+      <ul class="dropdown-menu dropdown-menu-custom" aria-labelledby="userDropdown">
+        <li>
+          <a class="dropdown-item" href="#">
+            <i class="bi bi-person-circle"></i> Профиль
+          </a>
+        </li>
+        <li><hr class="dropdown-divider"></li>
+        <li>
+          <a class="dropdown-item text-danger" href="#">
+            <i class="bi bi-box-arrow-right"></i> Выход
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</aside>
+
+<main class="main-content">
+  <div class="text-center mb-5" style="width: 100%; max-width: 850px;">
+    <h1 class="display-5 fw-semibold">Главная</h1>
+    <p class="text-muted lead">Вы находитесь на сайте, предназначенном для продажи товаров.</p>
+    <div class="header-line"></div>
+  </div>
+  <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center">
+    <div class="col">
+      <div class="card card-pricing h-100 text-center p-3">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">Товар 1</h5>
+          <div class="price">$100</div>
+          <ul class="feature-list mt-3 mb-4">
+            <li>10 users included</li>
+            <li>2 GB of storage</li>
+            <li>Email support</li>
+            <li>Help center access</li>
+          </ul>
+          <div class="mt-auto">
+            <a href="#" class="btn btn-outline-primary w-100 py-2 fw-semibold">Купить</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card card-pricing h-100 text-center p-3">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">Товар 2</h5>
+          <div class="price">$150</div>
+          <ul class="feature-list mt-3 mb-4">
+            <li>15 users included</li>
+            <li>3 GB of storage</li>
+            <li>Email support</li>
+            <li>Help center access</li>
+          </ul>
+          <div class="mt-auto">
+            <a href="#" class="btn btn-outline-primary w-100 py-2 fw-semibold">Купить</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card card-pricing h-100 text-center p-3">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">Товар 3</h5>
+          <div class="price">$50</div>
+          <ul class="feature-list mt-3 mb-4">
+            <li>5 users included</li>
+            <li>1 GB of storage</li>
+            <li>Email support</li>
+            <li>Help center access</li>
+          </ul>
+          <div class="mt-auto">
+            <a href="#" class="btn btn-outline-primary w-100 py-2 fw-semibold">Купить</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<script src="/Django/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
